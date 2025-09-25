@@ -1,48 +1,45 @@
-// ===== GLOBAL VARIABLES =====
-const box = document.querySelector('.animated-box');
-const toggleBoxBtn = document.getElementById('toggleBoxBtn');
-const modal = document.getElementById('modal');
-const showModalBtn = document.getElementById('showModalBtn');
-const closeModalBtn = document.getElementById('closeModalBtn');
+/* === JavaScript Functions & Animation Logic === */
+
+// Global variables (accessible everywhere)
+const box = document.getElementById("animatedBox");
+const btn = document.getElementById("animateBtn");
+const resultText = document.getElementById("functionResult");
 
 /**
- * Toggle a CSS class to start/stop an animation
- * @param {HTMLElement} element - element to toggle
- * @param {string} className - class to add/remove
- * @returns {boolean} true if class was added, false if removed
+ * Triggers a CSS animation by adding and removing a class.
+ * @param {HTMLElement} element - The element to animate
+ * @param {string} animationClass - The CSS class that contains the animation
+ * @param {number} duration - How long to keep the class in ms
+ * @returns {string} - Status message
  */
-function toggleAnimation(element, className) {
-  const added = element.classList.toggle(className);
-  return added;
+function triggerAnimation(element, animationClass, duration) {
+  element.classList.add(animationClass);
+  // Remove the class after the animation ends so it can be replayed
+  setTimeout(() => element.classList.remove(animationClass), duration);
+  return `Animation '${animationClass}' played for ${duration/1000} seconds.`;
 }
 
 /**
- * Calculate next background color based on a flag
- * Demonstrates parameters + return
+ * Adds two numbers and returns the result.
+ * Demonstrates parameters and return values.
+ * @param {number} a
+ * @param {number} b
+ * @returns {number}
  */
-function pickBackgroundColor(isActive) {
-  return isActive ? '#2ecc71' : '#e67e22';
+function addNumbers(a, b) {
+  return a + b;
 }
 
-// ===== EVENT HANDLERS =====
-toggleBoxBtn.addEventListener('click', () => {
-  const active = toggleAnimation(box, 'box-active');
-  box.style.background = pickBackgroundColor(active); // apply result
-});
-
-showModalBtn.addEventListener('click', () => openModal());
-closeModalBtn.addEventListener('click', () => closeModal());
-
-/** Local scope example: only accessible inside */
-function openModal() {
-  let localMessage = 'Modal opened'; // local variable
-  console.log(localMessage);
-  modal.classList.add('show');
-  modal.classList.remove('hidden');
+/**
+ * Combines the above functions to animate the box and
+ * display a computed result.
+ */
+function handleButtonClick() {
+  // Local variable only accessible inside this function
+  const sum = addNumbers(7, 5);
+  const message = triggerAnimation(box, "animate", 2000);
+  resultText.textContent = `${message} | The sum of 7 and 5 is ${sum}.`;
 }
 
-function closeModal() {
-  modal.classList.remove('show');
-  // wait for transition to end before hiding
-  setTimeout(() => modal.classList.add('hidden'), 500);
-}
+// Attach event listener
+btn.addEventListener("click", handleButtonClick);
